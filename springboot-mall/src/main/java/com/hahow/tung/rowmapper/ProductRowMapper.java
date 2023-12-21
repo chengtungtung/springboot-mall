@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
+import com.hahow.tung.constant.ProductCategory;
 import com.hahow.tung.model.Product;
 
 public class ProductRowMapper implements RowMapper<Product> {
@@ -14,7 +15,11 @@ public class ProductRowMapper implements RowMapper<Product> {
 		Product product = new Product();
 		product.setProductId(rs.getInt("product_id"));
 		product.setProductName(rs.getString("product_name"));
-		product.setCategory(rs.getString("category"));
+
+		String categoryStr = rs.getString("category");
+		ProductCategory category = ProductCategory.valueOf(categoryStr);
+		product.setCategory(category);
+
 		product.setImageUrl(rs.getString("image_url"));
 		product.setPrice(rs.getInt("price"));
 		product.setStock(rs.getInt("stock"));

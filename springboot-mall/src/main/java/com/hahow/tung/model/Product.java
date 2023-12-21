@@ -2,19 +2,19 @@ package com.hahow.tung.model;
 
 import java.util.Date;
 
+import com.hahow.tung.constant.ProductCategory;
+
 public class Product {
 
 	private Integer productId;
 	private String productName;
-	private String category;
+	private ProductCategory category;
 	private String imageUrl;
 	private Integer price;
 	private Integer stock;
 	private String description;
 	private Date createDate;
 	private Date lastModifiedDate;
-	
-	
 	public Integer getProductId() {
 		return productId;
 	}
@@ -27,10 +27,10 @@ public class Product {
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
-	public String getCategory() {
+	public ProductCategory getCategory() {
 		return category;
 	}
-	public void setCategory(String category) {
+	public void setCategory(ProductCategory category) {
 		this.category = category;
 	}
 	public String getImageUrl() {
@@ -69,6 +69,9 @@ public class Product {
 	public void setLastModifiedDate(Date lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
 	}
+	
+	
+	
 	
 	
 	
