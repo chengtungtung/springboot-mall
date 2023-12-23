@@ -2,7 +2,7 @@ package com.hahow.tung.service;
 
 import java.util.List;
 
-import com.hahow.tung.constant.ProductCategory;
+import com.hahow.tung.dto.ProductQueryParams;
 import com.hahow.tung.dto.ProductRequest;
 import com.hahow.tung.model.Product;
 
@@ -16,6 +16,9 @@ public interface ProductService {
 	
 	Product deleteProductById(Integer productId);
 	
-	List<Product> getProducts(ProductCategory category, String search);
+	// 方法一 ： 較難維護
+//	List<Product> getProducts(ProductCategory category, String search);
+	// 方法二 ： 較好維護
+	List<Product> getProducts(ProductQueryParams productQueryParams);
 
 }

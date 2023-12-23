@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hahow.tung.constant.ProductCategory;
+import com.hahow.tung.dto.ProductQueryParams;
 import com.hahow.tung.dto.ProductRequest;
 import com.hahow.tung.model.Product;
 import com.hahow.tung.service.ProductService;
@@ -85,11 +86,26 @@ public class ProductController {
 	}
 
 	// 查詢商品列表
+	// 方法一 => 缺點；當傳進來的參數越來越多，會越來越難維護
+//	@GetMapping("/products")
+//	public ResponseEntity<List<Product>> getProducts(@RequestParam(required = false) ProductCategory category,
+//			@RequestParam(required = false) String search) {
+//		
+//		List<Product> productList = productService.getProducts(category, search);
+//
+//		return ResponseEntity.status(HttpStatus.OK).body(productList);
+//	}
+	
+	// 方法二 => 多新增一個class來管理參數，較好維護
 	@GetMapping("/products")
 	public ResponseEntity<List<Product>> getProducts(@RequestParam(required = false) ProductCategory category,
 			@RequestParam(required = false) String search) {
-		List<Product> productList = productService.getProducts(category, search);
-
+		ProductQueryParams productQueryParams = new ProductQueryParams();
+		productQueryParams.setCategory(category);
+		productQueryParams.setSearch(search);
+		
+		List<Product> productList = productService.getProducts(productQueryParams);
+		
 		return ResponseEntity.status(HttpStatus.OK).body(productList);
 	}
 
