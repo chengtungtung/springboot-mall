@@ -57,11 +57,11 @@ public class ProductController {
 			@RequestBody @Valid ProductRequest productRequest) {
 		log.info("進入ProductController的updateProduct方法 => 修改的productId值為 " + productId);
 		Product product = productService.getProductById(productId);
-		
-		if(product != null) {
+
+		if (product != null) {
 			productService.updateProduct(productId, productRequest);
-			return ResponseEntity.status(HttpStatus.OK).body(product);	
-		}else {
+			return ResponseEntity.status(HttpStatus.OK).body(product);
+		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 	}
@@ -70,9 +70,10 @@ public class ProductController {
 	public ResponseEntity<Product> deleteProduct(@PathVariable Integer productId) {
 		log.info("進入ProductController的deleteProduct方法 => 刪除的productId值為 " + productId);
 
-//		productService.deleteProduct(productId);
+		Product delProduct = productService.deleteProductById(productId);
 
-		return ResponseEntity.status(HttpStatus.OK).build();
+//		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		return ResponseEntity.status(HttpStatus.OK).body(delProduct);
 	}
 
 }
