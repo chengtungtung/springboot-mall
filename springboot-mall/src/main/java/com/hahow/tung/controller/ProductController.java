@@ -1,5 +1,7 @@
 package com.hahow.tung.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -74,6 +76,13 @@ public class ProductController {
 
 //		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 		return ResponseEntity.status(HttpStatus.OK).body(delProduct);
+	}
+	
+	@GetMapping("/products")
+	public ResponseEntity<List<Product>> getProducts(){
+		List<Product> productList = productService.getProducts();
+		
+		return ResponseEntity.status(HttpStatus.OK).body(productList);
 	}
 
 }

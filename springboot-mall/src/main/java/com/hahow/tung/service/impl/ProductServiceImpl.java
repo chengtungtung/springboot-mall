@@ -1,5 +1,7 @@
 package com.hahow.tung.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +36,12 @@ public class ProductServiceImpl implements ProductService {
 	public Product deleteProductById(Integer productId) {
 		return productDao.deleteProductById(productId);
 	}
+
+	@Override
+	public List<Product> getProducts() {
+		return productDao.getProducts();
+	}
+	
 	
 	
 	
