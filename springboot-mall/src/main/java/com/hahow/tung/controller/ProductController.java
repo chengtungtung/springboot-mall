@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hahow.tung.constant.ProductCategory;
 import com.hahow.tung.dto.ProductRequest;
 import com.hahow.tung.model.Product;
 import com.hahow.tung.service.ProductService;
@@ -29,6 +31,7 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 
+	// 查詢單個商品
 	@GetMapping("/products/{productId}")
 	public ResponseEntity<Product> getProduct(@PathVariable Integer productId) {
 		log.info("進入ProductController的getProduct方法");
@@ -43,6 +46,7 @@ public class ProductController {
 
 	}
 
+	// 新增商品
 	@PostMapping("/products")
 	public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductRequest productRequest) {
 		log.info("進入ProductController的createProduct方法");
@@ -54,6 +58,7 @@ public class ProductController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(product);
 	}
 
+	// 修改商品
 	@PutMapping("/products/{productId}")
 	public ResponseEntity<Product> updateProduct(@PathVariable Integer productId,
 			@RequestBody @Valid ProductRequest productRequest) {
@@ -68,6 +73,7 @@ public class ProductController {
 		}
 	}
 
+	// 刪除商品
 	@DeleteMapping("/products/{productId}")
 	public ResponseEntity<Product> deleteProduct(@PathVariable Integer productId) {
 		log.info("進入ProductController的deleteProduct方法 => 刪除的productId值為 " + productId);
@@ -77,11 +83,13 @@ public class ProductController {
 //		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 		return ResponseEntity.status(HttpStatus.OK).body(delProduct);
 	}
-	
+
+	// 查詢商品列表
 	@GetMapping("/products")
-	public ResponseEntity<List<Product>> getProducts(){
-		List<Product> productList = productService.getProducts();
-		
+	public ResponseEntity<List<Product>> getProducts(@RequestParam(required = false) ProductCategory category,
+			@RequestParam(required = false) String search) {
+		List<Product> productList = productService.getProducts(category, search);
+
 		return ResponseEntity.status(HttpStatus.OK).body(productList);
 	}
 
