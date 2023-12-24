@@ -147,6 +147,10 @@ public class ProductDaoIpml implements ProductDao {
 		// *特別注意* : 要使用 ORDER BY 敘述句時，只能用字串拼接的方式，不能像上面用參數代入的方式
 		sql = sql + " ORDER BY " + productQueryParams.getOrderBy() + " " + productQueryParams.getSort();
 
+		sql = sql + " LIMIT :limit OFFSET :offset";
+		map.put("limit", productQueryParams.getLimit());
+		map.put("offset", productQueryParams.getOffset());		
+		
 		List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
 
 		return productList;
