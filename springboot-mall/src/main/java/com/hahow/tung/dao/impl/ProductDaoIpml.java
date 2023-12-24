@@ -134,19 +134,26 @@ public class ProductDaoIpml implements ProductDao {
 				+ "description, created_date, last_modified_date FROM product WHERE 1=1";
 
 		Map<String, Object> map = new HashMap<>();
+		
+		// 查詢條件 
+		// 此段與其他方法中的程式碼有重複，故另外寫一個addFilteringSql方法統一處理，增加程式維護性
+//		if (productQueryParams.getCategory() != null) {
+//			sql = sql + " AND category = :category";
+//			map.put("category", productQueryParams.getCategory().name());
+//		}
+//		if (productQueryParams.getSearch() != null) {
+//			sql = sql + " AND product_name LIKE :search";
+//			map.put("search", "%" + productQueryParams.getSearch() + "%");
+//		}
+		
+		// 將重複程式碼另寫一個方法做處理
+		sql = addFilteringSql(sql, map, productQueryParams);
 
-		if (productQueryParams.getCategory() != null) {
-			sql = sql + " AND category = :category";
-			map.put("category", productQueryParams.getCategory().name());
-		}
-		if (productQueryParams.getSearch() != null) {
-			sql = sql + " AND product_name LIKE :search";
-			map.put("search", "%" + productQueryParams.getSearch() + "%");
-		}
-
+		// 排序
 		// *特別注意* : 要使用 ORDER BY 敘述句時，只能用字串拼接的方式，不能像上面用參數代入的方式
 		sql = sql + " ORDER BY " + productQueryParams.getOrderBy() + " " + productQueryParams.getSort();
 
+		// 分頁
 		sql = sql + " LIMIT :limit OFFSET :offset";
 		map.put("limit", productQueryParams.getLimit());
 		map.put("offset", productQueryParams.getOffset());
@@ -161,7 +168,30 @@ public class ProductDaoIpml implements ProductDao {
 		String sql = "SELECT count(*) FROM product WHERE 1=1";
 
 		Map<String, Object> map = new HashMap<>();
+		
+		// 查詢條件 
+		// 此段與其他方法中的程式碼有重複，故另外寫一個addFilteringSql方法統一處理，增加程式維護性
+//		if (productQueryParams.getCategory() != null) {
+//			sql = sql + " AND category = :category";
+//			map.put("category", productQueryParams.getCategory().name());
+//		}
+//		if (productQueryParams.getSearch() != null) {
+//			sql = sql + " AND product_name LIKE :search";
+//			map.put("search", "%" + productQueryParams.getSearch() + "%");
+//		}
+		
+		// 將重複程式碼另寫一個方法做處理
+		sql = addFilteringSql(sql, map, productQueryParams);
 
+		Integer total = namedParameterJdbcTemplate.queryForObject(sql, map, Integer.class);
+
+		return total;
+	}
+
+	
+	// getProducts方法和countProduct方法有重複的程式碼，所以另外寫一個方法來增加程式的維護性
+	private String addFilteringSql(String sql, Map<String, Object> map, ProductQueryParams productQueryParams) {
+		
 		if (productQueryParams.getCategory() != null) {
 			sql = sql + " AND category = :category";
 			map.put("category", productQueryParams.getCategory().name());
@@ -170,10 +200,7 @@ public class ProductDaoIpml implements ProductDao {
 			sql = sql + " AND product_name LIKE :search";
 			map.put("search", "%" + productQueryParams.getSearch() + "%");
 		}
-
-		Integer total = namedParameterJdbcTemplate.queryForObject(sql, map, Integer.class);
-
-		return total;
+		return sql;
 	}
 
 }
