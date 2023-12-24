@@ -26,6 +26,7 @@ import com.hahow.tung.dto.ProductQueryParams;
 import com.hahow.tung.dto.ProductRequest;
 import com.hahow.tung.model.Product;
 import com.hahow.tung.service.ProductService;
+import com.hahow.tung.util.Page;
 
 @Validated
 @RestController
@@ -101,10 +102,31 @@ public class ProductController {
 //	}
 
 	// 方法二 => 多新增一個class來管理參數，較好維護
+	// 此方法的分頁功能不會回傳總筆數
+//	@GetMapping("/products")
+//	public ResponseEntity<List<Product>> getProducts(@RequestParam(required = false) ProductCategory category,
+//			@RequestParam(required = false) String search, @RequestParam(defaultValue = "created_date") String orderBy,
+//			@RequestParam(defaultValue = "desc") String sort, @RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit,
+//			@RequestParam(defaultValue = "0") @Min(0) Integer offset) {
+//		ProductQueryParams productQueryParams = new ProductQueryParams();
+//		productQueryParams.setCategory(category);
+//		productQueryParams.setSearch(search);
+//		productQueryParams.setOrderBy(orderBy);
+//		productQueryParams.setSort(sort);
+//		productQueryParams.setLimit(limit);
+//		productQueryParams.setOffset(offset);
+//
+//		List<Product> productList = productService.getProducts(productQueryParams);
+//
+//		return ResponseEntity.status(HttpStatus.OK).body(productList);
+//	}
+
+	// 此方法的分頁功能會回傳總筆數
 	@GetMapping("/products")
-	public ResponseEntity<List<Product>> getProducts(@RequestParam(required = false) ProductCategory category,
+	public ResponseEntity<Page<Product>> getProducts(@RequestParam(required = false) ProductCategory category,
 			@RequestParam(required = false) String search, @RequestParam(defaultValue = "created_date") String orderBy,
-			@RequestParam(defaultValue = "desc") String sort, @RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit,
+			@RequestParam(defaultValue = "desc") String sort,
+			@RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit,
 			@RequestParam(defaultValue = "0") @Min(0) Integer offset) {
 		ProductQueryParams productQueryParams = new ProductQueryParams();
 		productQueryParams.setCategory(category);
@@ -116,7 +138,15 @@ public class ProductController {
 
 		List<Product> productList = productService.getProducts(productQueryParams);
 
-		return ResponseEntity.status(HttpStatus.OK).body(productList);
+		Integer total = productService.countProduct(productQueryParams);
+
+		Page<Product> page = new Page<>();
+		page.setLimit(limit);
+		page.setOffset(offset);
+		page.setTotal(total);
+		page.setResults(productList);
+
+		return ResponseEntity.status(HttpStatus.OK).body(page);
 	}
 
 }

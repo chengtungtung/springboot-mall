@@ -20,5 +20,7 @@ public interface ProductService {
 //	List<Product> getProducts(ProductCategory category, String search);
 	// 方法二 ： 較好維護
 	List<Product> getProducts(ProductQueryParams productQueryParams);
+	
+	Integer countProduct(ProductQueryParams productQueryParams);
 
 }
