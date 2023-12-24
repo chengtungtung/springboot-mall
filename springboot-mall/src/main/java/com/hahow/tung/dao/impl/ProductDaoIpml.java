@@ -12,7 +12,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
-import com.hahow.tung.constant.ProductCategory;
 import com.hahow.tung.dao.ProductDao;
 import com.hahow.tung.dto.ProductQueryParams;
 import com.hahow.tung.dto.ProductRequest;
@@ -127,7 +126,7 @@ public class ProductDaoIpml implements ProductDao {
 //		return productList;
 //	}
 
-	// 方法二 ：較好維護
+	// 方法二 ： 較好維護
 	@Override
 	public List<Product> getProducts(ProductQueryParams productQueryParams) {
 		String sql = "SELECT product_id, product_name, category, image_url, price, stock, "

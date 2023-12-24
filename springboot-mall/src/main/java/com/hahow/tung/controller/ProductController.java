@@ -73,7 +73,8 @@ public class ProductController {
 
 		if (product != null) {
 			productService.updateProduct(productId, productRequest);
-			return ResponseEntity.status(HttpStatus.OK).body(product);
+			Product updateProduct = productService.getProductById(productId);
+			return ResponseEntity.status(HttpStatus.OK).body(updateProduct);
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
