@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.hahow.tung.dao.UserDao;
@@ -27,6 +28,11 @@ public class UserServiceImpl implements UserService {
 		User user = userDao.getUserByEmail(userRegisterRequest.getEmail());
 
 		if (user == null) {
+			// 使用 MD5 生成密碼的雜湊值
+			String hashedPassword = DigestUtils.md5DigestAsHex(userRegisterRequest.getPassword().getBytes());
+			userRegisterRequest.setPassword(hashedPassword);
+
+			// 創建帳號
 			return userDao.createUser(userRegisterRequest);
 		} else {
 			log.warn("該 email 已被註冊過 => {}", userRegisterRequest.getEmail());
@@ -43,11 +49,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User login(UserLoginRequest userLoginRequest) {
 		User user = userDao.getUserByEmail(userLoginRequest.getEmail());
+		
+		// 使用 MD5 生成密碼的雜湊值
+		String hashedPassword = DigestUtils.md5DigestAsHex(userLoginRequest.getPassword().getBytes());
 
 		// 先確認資料庫有沒有一樣的email
 		if (user != null) {
 			// 再確認密碼有沒有一致
-			if (user.getPassword().equals(userLoginRequest.getPassword())) {
+			if (user.getPassword().equals(hashedPassword)) {
 				return user;
 			} else {
 				log.info("此 email => {} 的密碼不正確", userLoginRequest.getEmail());
