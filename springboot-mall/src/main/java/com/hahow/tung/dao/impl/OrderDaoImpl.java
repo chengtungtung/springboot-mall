@@ -109,10 +109,12 @@ public class OrderDaoImpl implements OrderDao {
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("orderId", orderId);
-		
+
 		List<OrderItem> orderItemList = namedParameterJdbcTemplate.query(sql, map, new OrderItemRowMapper());
 
 		return orderItemList;
 	}
+
+	
 
 }

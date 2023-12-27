@@ -133,8 +133,8 @@ public class ProductDaoIpml implements ProductDao {
 				+ "description, created_date, last_modified_date FROM product WHERE 1=1";
 
 		Map<String, Object> map = new HashMap<>();
-		
-		// 查詢條件 
+
+		// 查詢條件
 		// 此段與其他方法中的程式碼有重複，故另外寫一個addFilteringSql方法統一處理，增加程式維護性
 //		if (productQueryParams.getCategory() != null) {
 //			sql = sql + " AND category = :category";
@@ -144,7 +144,7 @@ public class ProductDaoIpml implements ProductDao {
 //			sql = sql + " AND product_name LIKE :search";
 //			map.put("search", "%" + productQueryParams.getSearch() + "%");
 //		}
-		
+
 		// 將重複程式碼另寫一個方法做處理
 		sql = addFilteringSql(sql, map, productQueryParams);
 
@@ -167,8 +167,8 @@ public class ProductDaoIpml implements ProductDao {
 		String sql = "SELECT count(*) FROM product WHERE 1=1";
 
 		Map<String, Object> map = new HashMap<>();
-		
-		// 查詢條件 
+
+		// 查詢條件
 		// 此段與其他方法中的程式碼有重複，故另外寫一個addFilteringSql方法統一處理，增加程式維護性
 //		if (productQueryParams.getCategory() != null) {
 //			sql = sql + " AND category = :category";
@@ -178,7 +178,7 @@ public class ProductDaoIpml implements ProductDao {
 //			sql = sql + " AND product_name LIKE :search";
 //			map.put("search", "%" + productQueryParams.getSearch() + "%");
 //		}
-		
+
 		// 將重複程式碼另寫一個方法做處理
 		sql = addFilteringSql(sql, map, productQueryParams);
 
@@ -187,10 +187,9 @@ public class ProductDaoIpml implements ProductDao {
 		return total;
 	}
 
-	
 	// getProducts方法和countProduct方法有重複的程式碼，所以另外寫一個方法來增加程式的維護性
 	private String addFilteringSql(String sql, Map<String, Object> map, ProductQueryParams productQueryParams) {
-		
+
 		if (productQueryParams.getCategory() != null) {
 			sql = sql + " AND category = :category";
 			map.put("category", productQueryParams.getCategory().name());
@@ -200,6 +199,20 @@ public class ProductDaoIpml implements ProductDao {
 			map.put("search", "%" + productQueryParams.getSearch() + "%");
 		}
 		return sql;
+	}
+
+	@Override
+	public void updateStock(Integer productId, Integer stock) {
+		String sql = "UPDATE product SET stock = :stock, last_modified_date = :lastModifiedDate "
+				+ "WHERE product_id = :productId";
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("stock", stock);
+		map.put("productId", productId);
+		map.put("lastModifiedDate", new Date());
+
+		namedParameterJdbcTemplate.update(sql, map);
+
 	}
 
 }
