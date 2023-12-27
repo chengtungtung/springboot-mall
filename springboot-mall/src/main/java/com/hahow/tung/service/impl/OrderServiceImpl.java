@@ -16,6 +16,7 @@ import com.hahow.tung.dao.ProductDao;
 import com.hahow.tung.dao.UserDao;
 import com.hahow.tung.dto.BuyItem;
 import com.hahow.tung.dto.CreateOrderRequest;
+import com.hahow.tung.dto.OrderQueryParams;
 import com.hahow.tung.model.Order;
 import com.hahow.tung.model.OrderItem;
 import com.hahow.tung.model.Product;
@@ -99,5 +100,25 @@ public class OrderServiceImpl implements OrderService {
 
 		return order;
 	}
+
+	@Override
+	public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+		List<Order> orderList = orderDao.getOrders(orderQueryParams);
+		
+		for(Order order :orderList) {
+			List<OrderItem> orderItemList = orderDao.getOrderItemsByOrderId(order.getOrderId());
+			order.setOrderItemList(orderItemList);
+
+		}
+		
+		return orderList;
+	}
+
+	@Override
+	public Integer countOrder(OrderQueryParams orderQueryParams) {
+		return orderDao.countOrder(orderQueryParams);
+	}
+	
+	
 
 }

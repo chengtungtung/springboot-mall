@@ -2,6 +2,7 @@ package com.hahow.tung.dao;
 
 import java.util.List;
 
+import com.hahow.tung.dto.OrderQueryParams;
 import com.hahow.tung.model.Order;
 import com.hahow.tung.model.OrderItem;
 
@@ -15,5 +16,7 @@ public interface OrderDao {
 
 	List<OrderItem> getOrderItemsByOrderId(Integer orderId);
 
+	Integer countOrder(OrderQueryParams orderQueryParams);
 	
+	List<Order> getOrders(OrderQueryParams orderQueryParams);
 }
