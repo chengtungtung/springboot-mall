@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hahow.tung.dto.CreateOrderRequest;
+import com.hahow.tung.model.Order;
 import com.hahow.tung.service.OrderService;
 
 @RestController
@@ -26,9 +27,9 @@ public class OrderController {
 
 		Integer orderId = orderService.createOrder(userId, createOrderRequest);
 		
+		Order order = orderService.getOrderById(orderId);
 		
-		
-		return ResponseEntity.status(HttpStatus.CREATED).body(orderId);
+		return ResponseEntity.status(HttpStatus.CREATED).body(order);
 	}
 
 }

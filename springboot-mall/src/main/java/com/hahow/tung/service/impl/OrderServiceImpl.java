@@ -11,6 +11,7 @@ import com.hahow.tung.dao.OrderDao;
 import com.hahow.tung.dao.ProductDao;
 import com.hahow.tung.dto.BuyItem;
 import com.hahow.tung.dto.CreateOrderRequest;
+import com.hahow.tung.model.Order;
 import com.hahow.tung.model.OrderItem;
 import com.hahow.tung.model.Product;
 import com.hahow.tung.service.OrderService;
@@ -53,5 +54,18 @@ public class OrderServiceImpl implements OrderService {
 		return orderId;
 
 	}
+
+	@Override
+	public Order getOrderById(Integer orderId) {
+		Order order = orderDao.getOrderById(orderId);
+		
+		List<OrderItem> orderItemList = orderDao.getOrderItemsByOrderId(orderId);
+		
+		order.setOrderItemList(orderItemList);
+		
+		return order;
+	}
+	
+	
 
 }
